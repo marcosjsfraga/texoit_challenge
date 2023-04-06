@@ -1,26 +1,20 @@
-from fastapi import FastAPI
 import uvicorn
-import csv
+import pandas as pd
+from fastapi import FastAPI
+from database import get_or_create_db
+from movies.model import Movies
+from services import import_csv
 
 app = FastAPI()
 
-
-def import_csv():
-    # print('Importando CSV...')
-    with open('movielist.csv', 'r') as external_file:
-        csv_file = csv.reader(external_file, delimiter=';')
-        for i, line in enumerate(csv_file):
-            print(str(line))
-
-
 if __name__ == '__main__':
-    import_csv()
-    
     uvicorn.run('main:app', host='127.0.0.1', reload=True)
 
+@app.on_event('startup')
+def initialize():
+    get_or_create_db()
+    import_csv()
 
 @app.get('/status')
 async def api_status():
     return { 'detail': 'API is already running! 🚀' }
-
-
