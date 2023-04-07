@@ -32,3 +32,7 @@
 	]
 }
 - Deve ter um README com instruções para rodar o projeto e os testes
+
+
+O que é um teste de INTEGRAÇÃO e por que EU não uso no meu dia a dia:
+https://www.youtube.com/watch?v=klaNs-HS0KU

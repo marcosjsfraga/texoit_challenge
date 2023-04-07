@@ -1,7 +1,10 @@
 from fastapi import APIRouter
+from repositories.movies_repository import MoviesRepository
 
 router = APIRouter()
 
-@router.get('/movies', status_code=200)
+@router.get('/producers_by_prize_ranges', status_code=200)
 async def api_status():
-    return { 'detail': 'Movies route.' }
+    moviesRepository = MoviesRepository()
+    return moviesRepository.get_producers_by_prize_ranges()
+    

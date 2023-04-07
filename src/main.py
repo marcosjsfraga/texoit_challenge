@@ -19,6 +19,6 @@ def initialize():
     database = Database()
     csvService = CSVService()
     
-    # database.initialize_db()
-    # csvService.import_movielist()
+    database.initialize_db()
+    csvService.import_movielist()
 
