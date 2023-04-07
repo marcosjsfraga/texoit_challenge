@@ -5,10 +5,10 @@ from repositories.movie_repository import MoviesRepository
 
 class CSVService():
 
-    def import_file(self, file_path):
+    def import_movielist(self):
         moviesRepository = MoviesRepository()
         
-        csv_file = pd.read_csv(file_path, delimiter=';')
+        csv_file = pd.read_csv('movielist.csv', delimiter=';')
         
         for index, row in csv_file.iterrows():        
             movie = Movies(

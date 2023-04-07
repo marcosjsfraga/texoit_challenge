@@ -1,18 +1,10 @@
-import logging
 import sqlite3
-from typing import Union, Optional
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
-
-DATABASE_URI = "database.db"
-# _connection: sqlite3.Connection
 
 class Database():
 
     def get_connection(self):
-        _connection = sqlite3.connect(database=DATABASE_URI, check_same_thread=False)
-        return _connection
+        return sqlite3.connect(database="database.db", check_same_thread=False)
 
     def initialize_db(self):
         connection = self.get_connection()

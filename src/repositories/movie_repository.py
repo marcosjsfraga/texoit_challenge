@@ -1,5 +1,5 @@
-from models.movies_model import Movies
 from configs.database import Database
+
 
 class MoviesRepository():
 
