@@ -1,9 +1,9 @@
 import uvicorn
-import pandas as pd
 from fastapi import FastAPI
-from database import get_or_create_db
-from movies.model import Movies
-from services import import_csv
+
+from configs.database import Database
+from services.csv_service import CSVService
+
 
 app = FastAPI()
 
@@ -12,9 +12,12 @@ if __name__ == '__main__':
 
 @app.on_event('startup')
 def initialize():
-    get_or_create_db()
-    import_csv()
+    database = Database()
+    csvService = CSVService()
+    
+    database.initialize_db()
+    csvService.import_file('movielist.csv')
 
-@app.get('/status')
+@app.get('/status', status_code=200)
 async def api_status():
     return { 'detail': 'API is already running! 🚀' }
