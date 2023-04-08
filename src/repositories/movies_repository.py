@@ -1,3 +1,4 @@
+import sqlite3
 from configs.database import Database
 
         
@@ -39,6 +40,22 @@ class MoviesRepository():
         cursor.close()
         connection.close()
         
+    def get_movies(self):
+        connection = self.database.get_connection()
+        connection.row_factory = sqlite3.Row
+        cursor = connection.cursor()
+        movies = []
+
+        cursor.execute("SELECT * FROM movies")
+        
+        for row in cursor.fetchall():
+             movies.append(dict(row))
+        
+        cursor.close()
+        connection.close()
+
+        return movies
+    
     def get_producers_by_prize_ranges(self):
         connection = self.database.get_connection()
         cursor = connection.cursor()
@@ -59,12 +76,7 @@ class MoviesRepository():
         last_name = ''
         last_year = 0
         
-        query = """
-            SELECT producers, year
-            FROM movies
-            WHERE winner = 1
-            ORDER BY producers, year
-        """
+        query = "SELECT producers, year FROM movies WHERE winner = 1 ORDER BY producers, year"
         cursor.execute(query)
 
         for row in cursor.fetchall():
@@ -74,7 +86,7 @@ class MoviesRepository():
                     'name': name, 
                     'year': row[1]
                 })
-            
+
         # Sort list by name, year
         producers_list = sorted(producers_list, key=lambda x: (x['name'], x['year']))
 

@@ -1,14 +1,15 @@
 from services.csv_service import CSVService
+from repositories.movies_repository import MoviesRepository
 
 def test_import_data():
     csv_service = CSVService()
+    movies_repository = MoviesRepository()
 
     result = csv_service.import_movielist()
 
+    movies = movies_repository.get_movies()
+
     assert 'detail' in result
     assert 'rows_imported' in result
-    
-    print(f"-> COUNT: {result['rows_imported']}")
-
     assert result['detail'] == 'File already imported'
-    # assert result['rows_imported'] == 3
+    assert result['rows_imported'] == len(movies)

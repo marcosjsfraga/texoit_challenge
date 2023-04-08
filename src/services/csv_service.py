@@ -6,10 +6,10 @@ from repositories.movies_repository import MoviesRepository
 class CSVService():
 
     def import_movielist(self):
-        moviesRepository = MoviesRepository()
+        movies_repository = MoviesRepository()
         rows_imported = 0
         
-        moviesRepository.delete_all_rows()
+        movies_repository.delete_all_rows()
         
         csv_file = pd.read_csv('movielist.csv', delimiter=';')
         
@@ -23,7 +23,7 @@ class CSVService():
                 winner = 1 if row['winner'] == 'yes' else 0
             )
             
-            moviesRepository.create(movie)
+            movies_repository.create(movie)
             
             rows_imported += 1
             
