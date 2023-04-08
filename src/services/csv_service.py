@@ -7,6 +7,7 @@ class CSVService():
 
     def import_movielist(self):
         moviesRepository = MoviesRepository()
+        rows_imported = 0
         
         moviesRepository.delete_all_rows()
         
@@ -23,3 +24,7 @@ class CSVService():
             )
             
             moviesRepository.create(movie)
+            
+            rows_imported += 1
+            
+        return { 'detail': 'File already imported', 'rows_imported': rows_imported }
