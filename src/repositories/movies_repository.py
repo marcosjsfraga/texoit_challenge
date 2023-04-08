@@ -43,9 +43,15 @@ class MoviesRepository():
         connection = self.database.get_connection()
         cursor = connection.cursor()
         producers_list = []
-        producer_got_2_awards_faster_list = {
+        producer_got_2_awards_faster = {
             'producer': '',
             'interval': 100,
+            'previousWin': 0,
+            'followingWin': 0
+        }
+        producer_with_longest_gap_between_two_awards = {
+            'producer': '',
+            'interval': 0,
             'previousWin': 0,
             'followingWin': 0
         }
@@ -59,13 +65,10 @@ class MoviesRepository():
             WHERE winner = 1
             ORDER BY producers, year
         """
-        
         cursor.execute(query)
 
         for row in cursor.fetchall():
-            
             names = row[0].replace(' and ', ', ').split(', ')
-            
             for name in names:
                 producers_list.append({
                     'name': name, 
@@ -76,40 +79,29 @@ class MoviesRepository():
         producers_list = sorted(producers_list, key=lambda x: (x['name'], x['year']))
 
         for producer in producers_list:
-            print(producer['name'], last_name)
-            
             if last_name == producer['name']:
-                print('EQ NAMES')
                 interval = producer['year'] - last_year
-                print(interval, producer_got_2_awards_faster_list['interval'])
-                
-                if producer_got_2_awards_faster_list['interval'] > interval:
-                    producer_got_2_awards_faster_list['producer'] = producer['name']
-                    producer_got_2_awards_faster_list['interval'] = interval
-                    producer_got_2_awards_faster_list['previousWin'] = last_year
-                    producer_got_2_awards_faster_list['followingWin'] = producer['year']
-                
+
+                if producer_got_2_awards_faster['interval'] > interval:
+                    producer_got_2_awards_faster['producer'] = producer['name']
+                    producer_got_2_awards_faster['interval'] = interval
+                    producer_got_2_awards_faster['previousWin'] = last_year
+                    producer_got_2_awards_faster['followingWin'] = producer['year']
+
+                if producer_with_longest_gap_between_two_awards['interval'] < interval:
+                    producer_with_longest_gap_between_two_awards['producer'] = producer['name']
+                    producer_with_longest_gap_between_two_awards['interval'] = interval
+                    producer_with_longest_gap_between_two_awards['previousWin'] = last_year
+                    producer_with_longest_gap_between_two_awards['followingWin'] = producer['year']
             else:
                 last_name = producer['name']
                 last_year = producer['year']
 
-
-            # Produtor com maior intervalo entre dois prêmios consecutivos
-            
-            # Produtor que obteve dois prêmios mais rápido
-            # interval = row[2] - row[1]
-            # if len(producer_got_2_awards_faster_list) == 0:
-            #     producer_got_2_awards_faster_list.append({
-            #         'name': row[0], 
-            #         'interval': interval
-            #     })
-            # else:
-            #     if producer_got_2_awards_faster_list.interval > interval:
-            #         producer_got_2_awards_faster_list.name = row[0]
-            #         producer_got_2_awards_faster_list.interval = interval
-        
-        
-        print(producer_got_2_awards_faster_list)
-        
-        return { 'detail': 'Get producers by prize ranges.' }
-        
+        return { 
+                'min': [
+                    producer_got_2_awards_faster
+                ], 
+                'max': [
+                    producer_with_longest_gap_between_two_awards
+                ] 
+            }
