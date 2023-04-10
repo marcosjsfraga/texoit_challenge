@@ -20,6 +20,10 @@ http://localhost:8000/apistatus
 http://localhost:8000/producers_by_prize_ranges
 
 
+#### URL do endpoint da documentação básica da API
+http://localhost:8000/docs
+
+
 #### Como executar os testes:
 ```bash
 $ pytest -v
